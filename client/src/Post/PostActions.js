@@ -21,7 +21,7 @@ export function addPostRequest(post) {
         title: post.title,
         content: post.content,
       },
-    }).then(res => dispatch(addPost(res.post)));
+    }, true).then(res => dispatch(addPost(res.post)));
   };
 }
 
@@ -55,6 +55,6 @@ export function deletePost(cuid) {
 
 export function deletePostRequest(cuid) {
   return (dispatch) => {
-    return callApi(`posts/${cuid}`, 'delete').then(() => dispatch(deletePost(cuid)));
+    return callApi(`posts/${cuid}`, 'delete', undefined, true).then(() => dispatch(deletePost(cuid)));
   };
 }

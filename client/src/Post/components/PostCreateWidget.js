@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
+import { useSelector } from 'react-redux';
 // Import Style
 
 const useStyles = makeStyles(theme => ({
@@ -18,9 +19,14 @@ const PostCreateWidget = ({ addPost }) => {
     const [state, setState] = useState({});
     const classes = useStyles();
 
+    const logedUser = useSelector(state => state.auth.user);
 
 
   const submit = () => {
+    if (!Object.keys(logedUser).length) {
+      alert('You need to be loged in to create a post!');
+      return;
+    }
     if (state.name && state.title && state.content) {
       addPost(state);
     }

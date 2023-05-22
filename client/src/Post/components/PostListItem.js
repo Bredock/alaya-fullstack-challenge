@@ -7,7 +7,11 @@ import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 
-function PostListItem({ post, onDelete }) {
+function PostListItem({ post, onDelete, user }) {
+  const postBelongUser = (post, user) => {
+    return post.user === user.cuid;
+  }
+
   return (
     <Card className="w-100 my-4">
       <CardContent>
@@ -23,11 +27,14 @@ function PostListItem({ post, onDelete }) {
           From {post.name}
         </Typography>
       </CardContent>
+      { postBelongUser(post, user) ? 
       <CardActions>
         <Button size="small" color="secondary" onClick={onDelete}>
           Delete post
         </Button>
       </CardActions>
+      : ""
+      }
     </Card>
   );
 }
@@ -41,6 +48,7 @@ PostListItem.propTypes = {
     cuid: PropTypes.string.isRequired,
   }).isRequired,
   onDelete: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 export default PostListItem;

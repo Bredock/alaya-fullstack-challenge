@@ -1,10 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 // Import Components
 import PostListItem from './PostListItem';
 
+
 function PostList(props) {
+  const logedUser = useSelector(state => state.auth.user);
+
   return (
     <div className="d-flex flex-column w-100">
       <h3 className="mt-4">Posts</h3>
@@ -14,6 +18,7 @@ function PostList(props) {
             post={post}
             key={post.cuid}
             onDelete={() => props.handleDeletePost(post.cuid)}
+            user={logedUser}
           />
         ))
       }

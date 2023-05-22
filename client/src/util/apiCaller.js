@@ -1,10 +1,19 @@
 import fetch from 'isomorphic-fetch';
+import { getToken } from './auth';
 
 export const API_URL = 'http://localhost:3000/api';
 
-export default async (endpoint, method = 'get', body) => {
+export default async (endpoint, method = 'get', body, token = false) => {
+  let headers = { 'content-type': 'application/json' };
+  if (token) {
+    headers = {
+      ...headers,
+      'Authorization': getToken()
+    };
+  }
+
   return fetch(`${API_URL}/${endpoint}`, {
-    headers: { 'content-type': 'application/json' },
+    headers,
     method,
     body: JSON.stringify(body),
   })
