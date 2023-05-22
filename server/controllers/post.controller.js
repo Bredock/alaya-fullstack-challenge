@@ -38,6 +38,7 @@ addPost = async (req, res) => {
 
   newPost.slug = slug(newPost.title.toLowerCase(), { lowercase: true });
   newPost.cuid = cuid();
+  newPost.user = req.user.cuid;
   newPost.save((err, saved) => {
     if (err) {
       res.status(500).send(err);
@@ -71,6 +72,16 @@ deletePost = async (req, res) => {
   Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
     if (err) {
       res.status(500).send(err);
+    }
+
+    if (!post) {
+      res.status(404).send({ msg: 'Resource not found' });
+      return;
+    }
+
+    if (post.user !== req.user.cuid) {
+      res.status(401).json({ msg: 'Unauthorized to delete the resource' });
+      return;
     }
 
     post.remove(() => {
