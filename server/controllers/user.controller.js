@@ -11,6 +11,11 @@ const sanitizeHtml = require('sanitize-html');
  * @returns void
  */
 login = (req, res) => {
+  if (!req.body.user.email || !req.body.user.password) {
+    res.status(403).end();
+    return;
+  }
+
   User.findOne({ userName: req.body.user.email }).exec((err, user) => {
     if (err) {
       res.status(500).send(err);
@@ -45,6 +50,7 @@ login = (req, res) => {
 register = (req, res) => {
   if (!req.body.user.email || !req.body.user.password) {
     res.status(403).end();
+    return;
   }
 
   const { salt, genHash: hash } = passwordUtils.genPassword(req.body.user.password);
